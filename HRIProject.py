@@ -31,7 +31,6 @@ def draw_rects(img, rects, color):
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 def Run(X,Y,Distance):
         global Walk, sit, HeadMoved,i,j
-        #api.Walk(True)
         print("Running...")
         command = 0
 	z=5
@@ -54,12 +53,8 @@ def Run(X,Y,Distance):
         if ((pan<headRightLim) and (pan>headLeftLim)):
 		print "head move"
 	elif (pan>headRightLim):
-		# call walk to the left till you reach pan = 512 (need while loop)
-#		while (pan != 512):
 			print "walk to the left"
 	elif (pan<headLeftLim):
-		# call walk to the right till you reach pan = 512 (need while loop)
-#		while (pan != 512):
                         print "walk to the left"
 	if (abs(X)>=100): p=9
 	elif (abs(X)<100 and abs(X) >70): p = 7

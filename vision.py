@@ -133,12 +133,12 @@ while 1:
     frame = frame + 1
     for index in range (0, count):
 #      print '[BLOCK_TYPE=%d SIG=%d X=%3d Y=%3d WIDTH=%3d HEIGHT=%3d]' % (blocks[index].type, blocks[index].signature, blocks[index].x, blocks[index].y, blocks[index].width, blocks[index].height)
-    Type =  (blocks[index].type
-    Sig =  blocks[index].signature
-    X =  blocks[index].x
-    Y =  blocks[index].y
-    Width =  blocks[index].width
-    Height =  blocks[index].height
-    Run(X,Y,Width)
+#    Type =  (blocks[index].type
+#    Sig =  blocks[index].signature
+#    X =  blocks[index].x
+#    Y =  blocks[index].y
+#    Width =  blocks[index].width
+#    Height =  blocks[index].height
+     Run(blocks[index].x , blocks[index].y , blocks[index].width)
 
 

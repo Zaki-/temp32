@@ -60,7 +60,9 @@ kk=0	#index for array code[]
 jj=0	#index to find the reset and space
 
 code=['s','s','s','s','s','s','s','s','s','s','s','s','s','s','s']		#store dots, dashes and spaces
+words=[]
 print 'coede = = = = ', code[:]
+finalWord=[]
 # functions for morse
 
 def DotDashCheck(index, th):
@@ -82,6 +84,42 @@ def ResetSpaceCheck(index, th):
 	elif (index >= th):
 		kk=0
 		code[:]=[]
+
+def CodeCheck(code):
+	global words
+	ii=0
+	temp=['s','s','s','s']
+	for w in code[:]:
+		if ((w == '.') or (w == '-')):
+			if (ii < 4):
+				temp[ii]=w
+				ii+=1
+			
+			else:
+				temp=['s','s','s','s']
+				print 'wrong code !!'
+			
+		elif (w == 's'):
+		        if (ii == 0):
+		        	temp=['s','s','s','s']
+			ii=0
+			print 'temp=', temp
+			words.append(Morse2Eng(temp))
+		else:
+			temp=['s','s','s','s']
+			print 'wrong code !'
+
+def Morse2Eng(code):
+	if (code[:]==['.','.','.','s']):return 'S'
+	elif (code[:]==['-','-','-','s']):return 'O'
+	elif (code[:]==['.','-','-','s']):return 'W'
+	elif (code[:]==['-','-','s','s']):return 'M'
+	elif (code[:]==['.','.','-','s']):return 'U'
+	elif (code[:]==['.','.','.','-']):return 'V'
+	elif (code[:]==['.','-','s','s']):return 'A'
+	else: return 0
+
+
 
 p = pyaudio.PyAudio()
 for i in range(p.get_device_count()):
@@ -123,13 +161,13 @@ try:
 	ii=ii+1
 	if (ii == 1):
 		kk=kk+1
-	if ((ii < 4) and (ii > 0)):
+	if ((ii < 5) and (ii > 0)):
 		add = '.'
-	elif (ii >= 4):
+	elif (ii >= 5):
 		add ='-'
-	print 'code[:] = ',code[:]
 	code[kk-1]=add
 	jj=0
+	print 'code= ', code[:]
 	
     else:
 #	print 0 , (rmsMAX)	  
@@ -138,16 +176,22 @@ try:
 #	1- space between codes within the letter ex ...=S ..-=U
 #	2- space between letters ex ... --- ... = S O S
 #	3- long space is reset
-	if (jj == 10):#add space between letters
+	if (jj == 8):#add space between letters
 		code[kk]='s'
 		kk=kk+1
 	if (jj == 20):#reset
 		#need to copy code to command[]before we lose the data
 		#or send the code for execution 
-		print 'code=', code[:]
+		print 'final code=', code[:]
+		CodeCheck(code)
+		#send command to the robot
+		if (words != []):
+			finalWord=words
+		print 'final word=',finalWord[:]
+		words=[]
 		kk=0
 		code=['s','s','s','s','s','s','s','s','s','s','s','s','s','s','s']
-	print '0 i j k = ' ,ii,jj,kk	
+	print 'finalwords = ' ,finalWord[:]	
 	jj=jj+1  
 	ii=0
 	

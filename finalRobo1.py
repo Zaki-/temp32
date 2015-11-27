@@ -56,12 +56,10 @@ THRESHOLD = 250
 walk = False
 # vars for morse 
 ii=0	#index to check morse code-- counter for rms greater than threshold
-	#index for array code[]
 jj=19	#index to find the reset and space
 
 code=[]		#store dots, dashes and spaces
 words=[]
-print 'coede = = = = ', code[:]
 finalWord=[]
 # functions for morse
 
@@ -86,6 +84,50 @@ def ResetSpaceCheck(index, th):
 		code[:]=[]
 
 def CodeCheck(code):
+	global words
+	ii=0
+	temp=['s','s','s','s']
+	for w in code[:]:
+		if ((w == '.') or (w == '-')):
+			if (ii < 4):
+				temp[ii]=w
+				ii+=1
+			
+			else:
+				temp=['s','s','s','s']
+				print 'wrong code !!'
+			
+		elif (w == 's'):
+		        if (ii == 0):
+		        	temp=['s','s','s','s']
+			ii=0
+			print 'temp=', temp
+			words.append(Morse2Eng(temp))
+		else:
+			temp=['s','s','s','s']
+def CodeCheck2(code):
+	global words
+	ii=0
+	temp=['s','s','s','s']
+	for w in code[:]:
+		if ((w == '.') or (w == '-')):
+			if (ii < 4):
+				temp[ii]=w
+				ii+=1
+			
+			else:
+				temp=['s','s','s','s']
+				print 'wrong code !!'
+			
+		elif (w == 's'):
+		        if (ii == 0):
+		        	temp=['s','s','s','s']
+			ii=0
+			print 'temp=', temp
+			words.append(Morse2Eng(temp))
+		else:
+			temp=['s','s','s','s']
+def CodeCheck1(code):
 	global words
 	ii=0
 	temp=['s','s','s','s']

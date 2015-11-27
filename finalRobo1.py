@@ -105,51 +105,6 @@ def CodeCheck(code):
 			words.append(Morse2Eng(temp))
 		else:
 			temp=['s','s','s','s']
-def CodeCheck2(code):
-	global words
-	ii=0
-	temp=['s','s','s','s']
-	for w in code[:]:
-		if ((w == '.') or (w == '-')):
-			if (ii < 4):
-				temp[ii]=w
-				ii+=1
-			
-			else:
-				temp=['s','s','s','s']
-				print 'wrong code !!'
-			
-		elif (w == 's'):
-		        if (ii == 0):
-		        	temp=['s','s','s','s']
-			ii=0
-			print 'temp=', temp
-			words.append(Morse2Eng(temp))
-		else:
-			temp=['s','s','s','s']
-def CodeCheck1(code):
-	global words
-	ii=0
-	temp=['s','s','s','s']
-	for w in code[:]:
-		if ((w == '.') or (w == '-')):
-			if (ii < 4):
-				temp[ii]=w
-				ii+=1
-			
-			else:
-				temp=['s','s','s','s']
-				print 'wrong code !!'
-			
-		elif (w == 's'):
-		        if (ii == 0):
-		        	temp=['s','s','s','s']
-			ii=0
-			print 'temp=', temp
-			words.append(Morse2Eng(temp))
-		else:
-			temp=['s','s','s','s']
-			print 'wrong code !'
 
 def Morse2Eng(code):
 	if (code[:]==['.','.','.','s']):return 'S'

@@ -56,10 +56,10 @@ THRESHOLD = 250
 walk = False
 # vars for morse 
 ii=0	#index to check morse code-- counter for rms greater than threshold
-kk=0	#index for array code[]
-jj=0	#index to find the reset and space
+	#index for array code[]
+jj=19	#index to find the reset and space
 
-code=['s','s','s','s','s','s','s','s','s','s','s','s','s','s','s']		#store dots, dashes and spaces
+code=[]		#store dots, dashes and spaces
 words=[]
 print 'coede = = = = ', code[:]
 finalWord=[]
@@ -120,6 +120,21 @@ def Morse2Eng(code):
 	elif (code[:]==['.','-','.','-']):return 'A'
 	else: return 0
 
+Word=[]
+def Add2Word(code):
+	global Word
+	if (code[:]==['.','.','.']):       Word.append('S')
+	elif (code[:]==['-','-','-']):     Word.append('O')
+	elif (code[:]==['.','-','-']):     Word.append('W')
+	elif (code[:]==['-','-']):         Word.append('M')
+	elif (code[:]==['.','.','-']):     Word.append('U')
+	elif (code[:]==['.','.','.','-']): Word.append('V')
+	elif (code[:]==['.','-']):         Word.append('A')
+	elif (code[:]==['.','-','.','.']): Word.append('L')
+	elif (code[:]==['-','.','-']):     Word.append('K')
+	elif (code[:]==['-']):             Word.append('T')
+	elif (code[:]==['.','-','-','.']): Word.append('P')
+	
 def RoboCommand(words):
 	global command
 	strg='' 
@@ -143,7 +158,7 @@ stream = p.open(format=FORMAT,
                 input=True,
 		input_device_index = 2,
                 frames_per_buffer=CHUNK)
-
+codeFlag = False
 print("* recording")
 try:
  while True:
@@ -171,12 +186,10 @@ try:
 #	ResetSpaceCheck(jj, 4)
 	ii=ii+1
 	if (ii == 1):
-		kk=kk+1
-	if ((ii < 5) and (ii > 0)):
-		add = '.'
-	elif (ii >= 5):
-		add ='-'
-	code[kk-1]=add
+		code.append('.')
+	elif (ii == 5):
+		code.pop()
+		code.append('-')
 	jj=0
 	print 'code= ', code[:]
 	
@@ -187,22 +200,26 @@ try:
 #	1- space between codes within the letter ex ...=S ..-=U
 #	2- space between letters ex ... --- ... = S O S
 #	3- long space is reset
-	if (jj == 8):#add space between letters
-		code[kk]='s'
-		kk=kk+1
+	#add space between letters
+#       if (code[:] != []):	
+	if (jj == 8):
+		#code.append('s')
+		Add2Word(code)
+		code=[]
 	if (jj == 20):#reset
 		#need to copy code to command[]before we lose the data
 		#or send the code for execution 
+		#if (code[:] != []):code.pop() # 's'
 		print 'final code=', code[:]
-		CodeCheck(code)
+		Add2Word(code)
+		#CodeCheck(code)
 		#send command to the robot
-		RoboCommand(words)
-		if (words != []):
-			finalWord=words
+		RoboCommand(Word)
+		if (Word != []):
+			finalWord=Word
 		print 'final word=',finalWord[:]
-		words=[]
-		kk=0
-		code=['s','s','s','s','s','s','s','s','s','s','s','s','s','s','s']
+		Word=[]
+		code=[]
 	print 'finalwords = ' ,finalWord[:]	
 	jj=jj+1  
 	ii=0

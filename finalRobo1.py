@@ -117,8 +117,19 @@ def Morse2Eng(code):
 	elif (code[:]==['.','.','-','s']):return 'U'
 	elif (code[:]==['.','.','.','-']):return 'V'
 	elif (code[:]==['.','-','s','s']):return 'A'
+	elif (code[:]==['.','-','.','-']):return 'A'
 	else: return 0
 
+def RoboCommand(words):
+	global command
+	strg='' 
+	for w in words[:]:
+	     if (w !=0):
+		strg=strg+str(w)
+	if (strg == 'W'):print 'api.PlayAction(W )'
+	elif (strg == 'M'):print 'api.PlayAction(M )'
+	elif (strg == 'SOS'):print 'api.PlayAction(SOS )'
+	elif (strg == 'UVA'):print 'api.PlayAction(UVA )'
 
 
 p = pyaudio.PyAudio()
@@ -185,6 +196,7 @@ try:
 		print 'final code=', code[:]
 		CodeCheck(code)
 		#send command to the robot
+		RoboCommand(words)
 		if (words != []):
 			finalWord=words
 		print 'final word=',finalWord[:]

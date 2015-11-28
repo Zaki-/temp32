@@ -1,3 +1,9 @@
+import sys
+
+#appends api directory path to sys path
+#sys.path.append("/home/pi/Human_Robots_Interaction_Fall15")
+sys.path.append("/home/pi/HROS1-Framework/Linux/project/Human_Robots_Interaction_Fall15")
+
 
 import api 
 import sys
@@ -69,7 +75,7 @@ def RoboInit():
 def centerX(x):
 	return x-160
 def centerY(y):
-	return y-100
+	return 100-y
 sitFlag =True #start with the sitting position
 walkFlag =False
 
@@ -91,7 +97,12 @@ def SetHead(x,y):
 	print 'tilt=',tilt
 
 def WalkReady(b):
-	global walkFalg
+	global walkFalg,startCounter
+	# counter to stop walking by itself after it counts 3000 frames
+	startCounter=frame
+	if (frame-startCounter) == 3000 :
+		b=False
+	# end of the counter
 	if (b == True) and (walkFlag == False) and (sitFlag == False) :
 		api.Walk(True)
 		api.WalkMove(3)
@@ -120,6 +131,31 @@ def SoS():
 def UVA():
 	if (sitFlag == False) and(walkFlag == False):
 		print 'api.PlayAction(UVA)'
+
+def checkSign(LHX,RHX,LHY,RHY,HeadY,chestX,chestY):
+	HY=abs(LHY-RHY)
+	rateY=abs(HeadY-chestY)
+	# stand up
+	if (abs(LHY-RHY-chestY)<10):
+		WalkReady(False)
+		sit(False) #stand
+	# sit down
+	if (HY<10) and (abs(chestY-HY)-abs(int(0.5*rateY))<10)) and (HY < chestY) and (HY < HeadY):
+	#the distance between chestY and both hands Y(HY) almost equels half of distance between head and chest
+		WalkReady(False)
+		sit(True)
+	# start walking
+	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10)) and (HY<HeadY) and (HY > chestY):
+	# the distance between head and both hands Y almost equels half of  the distance between the head and chest 
+		WalkReady(True)
+
+
+	# UVA
+	if (HY<10) and (RHX == LHX)) and (HY > chestY):
+		UVA()
+	# SoS
+	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10)) and (HY>HeadY) and (HY > chestY):
+		SoS()
 
 
 
@@ -196,6 +232,7 @@ try:
 				
 				chestY = tempY
 			
+		checkSign(LHX,RHX,LHY,RHY,HeadY,chestX,chestY)
 		print 'LHY=%d chestY=%d HeadY=%d RHY=%d' %(LHY, chestY, HeadY, RHY)
 #		SetHead(chestX,chestY)
 #		print 'RHX=%d RHY=%d CX=%d CY=%d LHX=%d LHY=%d' % (RHX, RHY, chestX, chestY, LHX, LHY)

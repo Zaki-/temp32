@@ -140,21 +140,21 @@ def checkSign(LHX,RHX,LHY,RHY,HeadY,chestX,chestY):
 		WalkReady(False)
 		sit(False) #stand
 	# sit down
-	if (HY<10) and (abs(chestY-HY)-abs(int(0.5*rateY))<10)) and (HY < chestY) and (HY < HeadY):
+	if (HY<10) and (abs(chestY-HY)-abs(int(0.5*rateY))<10) and (HY < chestY) and (HY < HeadY):
 	#the distance between chestY and both hands Y(HY) almost equels half of distance between head and chest
 		WalkReady(False)
 		sit(True)
 	# start walking
-	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10)) and (HY<HeadY) and (HY > chestY):
+	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10) and (HY<HeadY) and (HY > chestY):
 	# the distance between head and both hands Y almost equels half of  the distance between the head and chest 
 		WalkReady(True)
 
 
 	# UVA
-	if (HY<10) and (RHX == LHX)) and (HY > chestY):
+	if (HY<10) and (RHX == LHX) and (HY > chestY):
 		UVA()
 	# SoS
-	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10)) and (HY>HeadY) and (HY > chestY):
+	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10) and (HY>HeadY) and (HY > chestY):
 		SoS()
 
 

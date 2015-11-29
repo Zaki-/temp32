@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 import sys
 
+#espeak - to use TTS call the function speak(talk) while the variable 'talk' is string
+from subprocess import call
+
+
 #appends api directory path to sys path
 #sys.path.append("/home/pi/Human_Robots_Interaction_Fall15")
 sys.path.append("/home/pi/HROS1-Framework/Linux/project/Human_Robots_Interaction_Fall15")
@@ -26,7 +30,8 @@ def RoboInit():
         api.ServoShutdown()
         sys.exit()
 
-
+def speak(talk):
+	call(["espeak",talk])
 def RoboWalk(speed):
 	global walk
 	print 'Robo walking'
@@ -143,6 +148,8 @@ def RoboCommand(words):
 	elif (strg == 'SOS'):print 'api.PlayAction(SOS )'
 	elif (strg == 'UVA'):print 'api.PlayAction(UVA )'
 
+#talk = 'Hello'
+#speak(talk)
 
 p = pyaudio.PyAudio()
 for i in range(p.get_device_count()):

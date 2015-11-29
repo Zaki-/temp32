@@ -1,3 +1,4 @@
+# use ultrasonic sencer
 #!/usr/bin/python
 
 # remember to change the GPIO values below to match your sensors

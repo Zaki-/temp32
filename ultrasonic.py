@@ -22,10 +22,10 @@ def reading(sensor):
         
         # point the software to the GPIO pins the sensor is using
         # change these values to the pins you are using
-        # GPIO output = the pin that's connected to "Trig" on the sensor
-        # GPIO input = the pin that's connected to "Echo" on the sensor
-        GPIO.setup(17,GPIO.OUT)
-        GPIO.setup(27,GPIO.IN)
+        
+        
+        GPIO.setup(17,GPIO.OUT)# GPIO output = the pin that's connected to "Trig" on the sensor
+        GPIO.setup(27,GPIO.IN)# GPIO input = the pin that's connected to "Echo" on the sensor
         GPIO.output(17, GPIO.LOW)
         
         # found that the sensor can crash if there isn't a delay here

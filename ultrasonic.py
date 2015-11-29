@@ -87,4 +87,4 @@ def reading(sensor):
         print "Incorrect usonic() function varible."
 
         
-print reading(0)
+

@@ -4,6 +4,8 @@ import sys
 #espeak - to use TTS call the function speak(talk) while the variable 'talk' is string
 from subprocess import call
 
+# the function reading(0) return the distance in cm while 0 is the sencer ID(always 0)
+from ultrasonic import reading
 
 #appends api directory path to sys path
 #sys.path.append("/home/pi/Human_Robots_Interaction_Fall15")
@@ -135,7 +137,22 @@ def Add2Word(code):
 	elif (code[:]==['.','-','.','.']): Word.append('L')
 	elif (code[:]==['-','.','-']):     Word.append('K')
 	elif (code[:]==['-']):             Word.append('T')
+	elif (code[:]==['-','.','-']):     Word.append('K')
+	elif (code[:]==['-','.','.','.']): Word.append('B')
+	elif (code[:]==['-','.','-','.']): Word.append('C')
+	elif (code[:]==['-','.']):	   Word.append('N')
+	elif (code[:]==['-','.','.']):	   Word.append('D')
 	elif (code[:]==['.','-','-','.']): Word.append('P')
+	elif (code[:]==['-','-','.','-']): Word.append('Q')
+	elif (code[:]==['.']):		   Word.append('E')
+	elif (code[:]==['.','.','-','.']): Word.append('F')
+	elif (code[:]==['-','-','.']): 	   Word.append('G')
+	elif (code[:]==['.','.','.','.']): Word.append('H')
+	elif (code[:]==['.','.']):	   Word.append('I')
+	elif (code[:]==['.','-','-','-']): Word.append('J')
+	elif (code[:]==['-','.','.','-']): Word.append('X')
+	elif (code[:]==['-','.','-','-']): Word.append('Y')
+	elif (code[:]==['-','-','.','.']): Word.append('Z')
 	
 def RoboCommand(words):
 	global command
@@ -148,8 +165,8 @@ def RoboCommand(words):
 	elif (strg == 'SOS'):print 'api.PlayAction(SOS )'
 	elif (strg == 'UVA'):print 'api.PlayAction(UVA )'
 
-#talk = 'Hello'
-#speak(talk)
+talk = 'Hello Professor Dugan and H R I class. Please play morse code'
+speak(talk)
 
 p = pyaudio.PyAudio()
 for i in range(p.get_device_count()):
@@ -218,13 +235,23 @@ try:
 		Add2Word(code)
 		#CodeCheck(code)
 		#send command to the robot
+
+		# convert list to string
+		if (len(Word)>3):
+			strWord = ''.join(Word)
+		else: 
+			strWord = ' '.join(Word)
+		print 'strWord = ',strWord
+		
+		
+		speak(strWord)
 		RoboCommand(Word)
 		if (Word != []):
 			finalWord=Word
 		print 'final word=',finalWord[:]
 		Word=[]
 		code=[]
-	print 'finalwords = ' ,finalWord[:]	
+#	print 'finalwords = ' ,finalWord[:]	
 	jj=jj+1  
 	ii=0
 	

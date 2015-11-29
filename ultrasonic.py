@@ -17,7 +17,6 @@ def reading(sensor):
     # reference in this code is 25, which is the number of the GPIO 
     # port and not the number of the physical pin
     GPIO.setmode(GPIO.BCM)
-    
     if sensor == 0:
         
         # point the software to the GPIO pins the sensor is using
@@ -30,7 +29,7 @@ def reading(sensor):
         
         # found that the sensor can crash if there isn't a delay here
         # no idea why. If you have odd crashing issues, increase delay
-        time.sleep(0.3)
+        time.sleep(0.08)
         
         # sensor manual says a pulse ength of 10Us will trigger the 
         # sensor to transmit 8 cycles of ultrasonic burst at 40kHz and 
@@ -66,7 +65,7 @@ def reading(sensor):
         # time the signal came through
         # change this value to the pin you are using
         # GPIO input = the pin that's connected to "Echo" on the sensor
-        while GPIO.input(27) == 1:
+        while (GPIO.input(27) == 1):
           signalon = time.time()
         
         # work out the difference in the two recorded times above to 

@@ -1,3 +1,3 @@
 from ultrasonic import reading
-
-print reading(0)
+while True:
+    print reading(0)

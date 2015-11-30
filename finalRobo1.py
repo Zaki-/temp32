@@ -76,7 +76,7 @@ CHANNELS = 1
 RATE = 48000
 RECORD_SECONDS = 5
 WAVE_OUTPUT_FILENAME = "output.wav"
-THRESHOLD = 250
+THRESHOLD = 300 #250 is working fine
 walk = False
 # vars for morse 
 ii=0	#index to check morse code-- counter for rms greater than threshold
@@ -170,6 +170,7 @@ def Add2Word(code):
 	elif (code[:]==['-','.','.','-']): Word.append('X')
 	elif (code[:]==['-','.','-','-']): Word.append('Y')
 	elif (code[:]==['-','-','.','.']): Word.append('Z')
+	elif (code[:]==[' ']):		   Word.append(' ')
 	
 def RoboCommand(words):
 	global command
@@ -190,6 +191,8 @@ def RoboCommand(words):
 #talk = 'Hello '#Professor Dugan and H R I class. Please play morse code'
 #speak(talk)
 WELCOME()
+
+spaceFlag = False
 p = pyaudio.PyAudio()
 for i in range(p.get_device_count()):
 	dev = p.get_device_info_by_index(i)
@@ -222,13 +225,15 @@ try:
 	rmsMAX = rms
 
 #	main check
-
+#    print (rms),(rmsMAX)
     if(rms>THRESHOLD):
 
 #	print (rms), (rmsMAX)
 #	ResetSpaceCheck(jj, 4)
 	ii=ii+1
+
 	if (ii == 1):
+		spaceFlag = True
 		code.append('.')
 	elif (ii == 5):
 		code.pop()
@@ -249,31 +254,37 @@ try:
 		#code.append('s')
 		Add2Word(code)
 		code=[]
-	if (jj == 20):#reset
+	if (jj == 20):
+		code.append(' ')
+		Add2Word(code)
+		print 'code= ', code[:]
+		code=[]
+	if (jj == 40):#reset
 		#need to copy code to command[]before we lose the data
 		#or send the code for execution 
 		#if (code[:] != []):code.pop() # 's'
+		
+		if (Word[:] != [] ):#delete the last space (end of the string)
+			Word.pop()#pop
 		print 'final code=', code[:]
 		Add2Word(code)
 		#CodeCheck(code)
 		#send command to the robot
 
-		# convert list to string
-		if (len(Word)>3):
-			strWord = ''.join(Word)
-		else: 
-			strWord = ' '.join(Word)
-		print 'strWord = ',strWord
+		# convert list to string and speak it
 		
+		strWord = ''.join(Word)
+		if (Word[:]!=[]):
+			speak(strWord)
+		print 'strWord =',strWord
 		
-		speak(strWord)
 		RoboCommand(Word)
-		if (Word != []):
-			finalWord=Word
-		print 'final word=',finalWord[:]
+#		if (Word != []):
+#			finalWord=Word
+		print 'final word=',Word[:]
 		Word=[]
 		code=[]
-#	print 'finalwords = ' ,finalWord[:]	
+#	print 'finalwords = ' ,Word[:]	
 	jj=jj+1  
 	ii=0
 	

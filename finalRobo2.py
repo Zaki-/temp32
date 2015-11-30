@@ -157,6 +157,8 @@ def checkSign(LHX,RHX,LHY,RHY,HeadY,chestX,chestY):
 	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10) and (HY>HeadY) and (HY > chestY):
 		SoS()
 
+	# Introduction
+	# when one hand is up and pointing to the robot
 
 
 sit = 0
@@ -218,7 +220,8 @@ try:
 				RHX=centerX(blocks[index].x)
 				RHY=centerY(blocks[index].y)
 		
-             	if (blocks[index].signature == 5):
+             	if (blocks[index].signature == 5):  #  could be compairing with center of screen (0,0)
+             	# chestY is less than 0, HeadY is greater than 0
 			chestX=centerX(blocks[index].x)
 			chestY=centerY(blocks[index].y)
 			if (HeadY ==300): HeadY=chestY

@@ -76,6 +76,8 @@ def reading(sensor):
         # measurement. So now we convert this distance into centimetres
         distance = timepassed * 17000
         
+	print 'distance= ', int(distance)
+	
         # return the distance of an object in front of the sensor in cm
         return distance
         

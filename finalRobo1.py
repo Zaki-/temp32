@@ -49,6 +49,23 @@ def RoboStop():
 	api.PlayAction(16)
 	walk = False
 # End of RoboStop
+def WELCOME():
+
+	welcomeMSG = "Hello. My name is Min."
+	MSG2=" and this is my friend Kitt."
+	MSG3=" my job, is translator. I traslate from morse code to English. "
+	MSG4="and also to Kitt. by sign language. "
+	MSG5="  you can play morse code whenever you ready."
+	speak(welcomeMSG)
+	print "api.PlayAction(wave)"
+	#set delay
+	speak(MSG2)
+	print "api.PlayAction(introduce kitt)"
+	#set delay
+	speak(MSG3)
+	speak(MSG4)
+	speak(MSG5)
+	
 
 RoboInit()
 
@@ -137,7 +154,7 @@ def Add2Word(code):
 	elif (code[:]==['.','-','.','.']): Word.append('L')
 	elif (code[:]==['-','.','-']):     Word.append('K')
 	elif (code[:]==['-']):             Word.append('T')
-	elif (code[:]==['-','.','-']):     Word.append('K')
+	elif (code[:]==['.','-','.']):     Word.append('R')
 	elif (code[:]==['-','.','.','.']): Word.append('B')
 	elif (code[:]==['-','.','-','.']): Word.append('C')
 	elif (code[:]==['-','.']):	   Word.append('N')
@@ -160,14 +177,19 @@ def RoboCommand(words):
 	for w in words[:]:
 	     if (w !=0):
 		strg=strg+str(w)
-	if (strg == 'W'):print 'api.PlayAction(W )'
-	elif (strg == 'M'):print 'api.PlayAction(M )'
+	if (strg == 'WALK'):print 'api.PlayAction(W )'
+	elif (strg == 'STOP'):print 'api.PlayAction(M )'
+	elif (strg == 'FINAL'):
+		print 'api.PlayAction(walk)'
+		while int(reading(0))>30:
+			print 'walking' #30cm is the distance between the two robots- we can set the final line at this point
+		print 'api.PlayAction(stop)'
 	elif (strg == 'SOS'):print 'api.PlayAction(SOS )'
 	elif (strg == 'UVA'):print 'api.PlayAction(UVA )'
 
-talk = 'Hello Professor Dugan and H R I class. Please play morse code'
-speak(talk)
-
+#talk = 'Hello '#Professor Dugan and H R I class. Please play morse code'
+#speak(talk)
+WELCOME()
 p = pyaudio.PyAudio()
 for i in range(p.get_device_count()):
 	dev = p.get_device_info_by_index(i)

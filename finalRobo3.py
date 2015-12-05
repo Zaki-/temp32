@@ -15,8 +15,8 @@ tempY=0
 speedInc=0
 timer = 0
 chestX = 0
-chestY=300
-HeadY=300
+chestY=0
+HeadY=0
 LHX=0
 RHX=0
 LHY=0
@@ -131,34 +131,42 @@ def SoS():
 def UVA():
 	if (sitFlag == False) and(walkFlag == False):
 		print 'api.PlayAction(UVA)'
+def CheckSign2(RHY, LHY, chestY, HeadY):
+	print RHY
 
-def checkSign(LHX,RHX,LHY,RHY,HeadY,chestX,chestY):
+
+
+def checkSign(LHY,RHY,HeadY,chestY):
 	HY=abs(LHY-RHY)
+	avg=abs(int((LHY+RHY)/2))
 	rateY=abs(HeadY-chestY)
 	# stand up
-	if (abs(LHY-RHY-chestY)<10):
-		WalkReady(False)
-		sit(False) #stand
+	if (avg-chestY)<10:
+		print 'stand'
+#		WalkReady(False)
+#		sit(False) #stand
 	# sit down
-	if (HY<10) and (abs(chestY-HY)-abs(int(0.5*rateY))<10) and (HY < chestY) and (HY < HeadY):
+	#if HY > chestY+20
+	if (HY<10) and (abs(chestY-HY)-abs(int(0.3*rateY))<10) and (avg > chestY) and (avg > HeadY):
 	#the distance between chestY and both hands Y(HY) almost equels half of distance between head and chest
-		WalkReady(False)
-		sit(True)
+		print 'sit'
+#		WalkReady(False)
+#		sit(True)
 	# start walking
-	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10) and (HY<HeadY) and (HY > chestY):
+	if (HY<10) and (abs(HeadY-HY)-abs(int(0.3*rateY))<10) and (avg>HeadY) and (avg < chestY):
 	# the distance between head and both hands Y almost equels half of  the distance between the head and chest 
-		WalkReady(True)
+		print 'walking'
+#		WalkReady(True)
 
 
 	# UVA
-	if (HY<10) and (RHX == LHX) and (HY > chestY):
-		UVA()
+#	if (HY<10) and (RHX == LHX) and (HY > chestY):
+#		UVA()
 	# SoS
-	if (HY<10) and (abs(headY-HY)-abs(int(0.5*rateY))<10) and (HY>HeadY) and (HY > chestY):
-		SoS()
+	if (HY<10) and (abs(HeadY-HY)-abs(int(0.3*rateY))<10) and (avg<HeadY) and (avg < chestY):
+		print 'sos'
+#		SoS()
 
-	# Introduction
-	# when one hand is up and pointing to the robot
 
 
 sit = 0
@@ -196,65 +204,45 @@ try:
        if (int(api.BatteryVoltLevel()) <= battryLim):
 
 	print 'Low Battery'
-	api.Walk(False)
-	api.PlayAction(15)
-	api.ServoShutdown()
-	sys.exit()
+#	api.Walk(False)
+#	api.PlayAction(15)
+#	api.ServoShutdown()
+#	sys.exit()
      else:
 #       print 'Battery power', int(api.BatteryVoltLevel())
        if count > 0:
-#	 print 'count' , count
-	 #print 'block' , blocks
+#	 
          #blocks found
 	 Uframe=frame/500
-         print 'frame %3d:' % (Uframe)
+         print 'frame %3d:' % (frame)
          frame = frame +1
+	 #print 'RHY=%d LHY=%d chestY=%d HeadY=%d' %(RHY, LHY, chestY, HeadY)				
+	 checkSign(LHY,RHY,HeadY,chestY)
+
          for index in range(0, count):
 		# pixy reselution 320X200	     
-#             	print '[Block_type=%d  Sig=%d  X=%3d  Y=%3d   W=%3d   H=%3d]' % (blocks[index].type, blocks[index].signature, blocks[index].x, blocks[index].y, blocks[index].width, blocks[index].height)
 
-             	if (blocks[index].signature == 5):  #  could be compairing with center of screen (0,0)
-             	# chestY is less than 0, HeadY is greater than 0
-			print blocks[index].y
-#			chestX=centerX(blocks[index].x)
-#			chestY=centerY(blocks[index].y)
-#			if (HeadY ==300): HeadY=chestY
-#			if (chestY == 300): chestY=tempY
-#			if HeadY < chestY :
-#				tempY=chestY
-#				chestY=HeadY
-#				HeadY=tempY
-				
-#			elif HeadY >= tempY :
-				
-#				chestY = tempY
+             	if (index == 0) and (blocks[index].signature == 1):
+			RHX=blocks[index].x
+			RHY=blocks[index].y
+		if (index == 1) and (blocks[index].signature == 1):
+			LHX=blocks[index].x
+			LHY=blocks[index].y
 
+		if (index == 2) and (blocks[index].signature == 5):
+			tempX=blocks[index].x
+			tempY=blocks[index].y
+		if (index == 3) and (blocks[index].signature == 5):
+			if (blocks[index].y > tempY):
+				chestY=blocks[index].y
+				HeadY=tempY
+				tempY=0
+			else:
+				chestY=tempY
+				HeadY=blocks[index].y
+				tempY=0
+#						
 
-
-
-#             	if ((blocks[index].signature == 1) and (chestX != 0)):# or (blocks[index].signature == 1)):
-#             		if (blocks[index].x > chestX):
-#				LHX=centerX(blocks[index].x)
-#				LHY=centerY(blocks[index].y)
-#			elif (blocks[index].x <= chestX):
-#				RHX=centerX(blocks[index].x)
-#				RHY=centerY(blocks[index].y)
-		
-			
-#		checkSign(LHX,RHX,LHY,RHY,HeadY,chestX,chestY)
-#		print 'LHY=%d chestY=%d HeadY=%d RHY=%d' %(LHY, chestY, HeadY, RHY)
-#		SetHead(chestX,chestY)
-#		print 'RHX=%d RHY=%d CX=%d CY=%d LHX=%d LHY=%d' % (RHX, RHY, chestX, chestY, LHX, LHY)
-#		speedInc = 0
-#		timer = 0
-#	     	if (((blocks[index].signature == 5) or (blocks[index].signature == 5)):# and (walk == True)):
-#			print 'track'
-#			X = centerX(blocks[index].x)
-#			print 'X track', X
-#			RoboTurn(Y)	 
-
-    		#call the walk function
-#	     	RoboWalk(color, X)
 except (KeyboardInterrupt):
    api.ServoShutdown()
    sys.exit()

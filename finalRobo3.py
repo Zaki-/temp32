@@ -136,7 +136,9 @@ def CheckSign2(RHY, LHY, chestY, HeadY):
 
 
 
-def checkSign(LHY,RHY,HeadY,chestY):
+def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea):
+	#one of the chalenges is the rate of the edges must change with the distance
+	
 	HY=abs(LHY-RHY)
 	avg=abs(int((LHY+RHY)/2))
 	rateY=abs(HeadY-chestY)
@@ -146,8 +148,8 @@ def checkSign(LHY,RHY,HeadY,chestY):
 #		WalkReady(False)
 #		sit(False) #stand
 	# sit down
-	#if HY > chestY+20
-	if (HY<10) and (abs(chestY-HY)-abs(int(0.3*rateY))<10) and (avg > chestY) and (avg > HeadY):
+	if (HY > 10) and (LHY>chestarea):
+	#if (HY<10) and (abs(chestY-HY)-abs(int(0.3*rateY))<10) and (avg > chestY) and (avg > HeadY):
 	#the distance between chestY and both hands Y(HY) almost equels half of distance between head and chest
 		print 'sit'
 #		WalkReady(False)
@@ -217,7 +219,7 @@ try:
          print 'frame %3d:' % (frame)
          frame = frame +1
 	 #print 'RHY=%d LHY=%d chestY=%d HeadY=%d' %(RHY, LHY, chestY, HeadY)				
-	 checkSign(LHY,RHY,HeadY,chestY)
+	 checkSign(LHY, LHarea,RHY,RHarea, HeadY, Headarea,chestY, chestarea)
 
          for index in range(0, count):
 		# pixy reselution 320X200	     

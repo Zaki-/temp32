@@ -225,17 +225,22 @@ try:
              	if (index == 0) and (blocks[index].signature == 1):
 			RHX=blocks[index].x
 			RHY=blocks[index].y
+			RHarea=blocks[index].height*blocks[index].width
 		if (index == 1) and (blocks[index].signature == 1):
 			LHX=blocks[index].x
 			LHY=blocks[index].y
+			LHarea=blocks[index].height*blocks[index].width
 
 		if (index == 2) and (blocks[index].signature == 5):
 			tempX=blocks[index].x
 			tempY=blocks[index].y
+			temparea=blocks[index].height*blocks[index].width
 		if (index == 3) and (blocks[index].signature == 5):
 			if (blocks[index].y > tempY):
 				chestY=blocks[index].y
+				chestarea=blocks[index].height*blocks[index].width
 				HeadY=tempY
+				Headarea=temparea
 				tempY=0
 			else:
 				chestY=tempY

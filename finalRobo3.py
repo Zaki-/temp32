@@ -120,7 +120,7 @@ def Sit(b):#pass true to make the robot sit
 		api.PlayAction(16)
 		sitFlag = True
 	elif (b == False) and (sitFlag ==True):
-		api.PlayAction(1)
+		api.PlayAction(2)
 		sitFlag = False
 		
 
@@ -134,30 +134,41 @@ def UVA():
 def CheckSign2(RHY, LHY, chestY, HeadY):
 	print RHY
 
+sitFLAG=True
+standFLAG=False
+introFLAG=False
 
-
-def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea):
+def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
 	#one of the chalenges is the rate of the edges must change with the distance
-	
+	global sitFLAG, standFLAG
 	HY=abs(LHY-RHY)
 	avg=abs(int((LHY+RHY)/2))
 	rateY=abs(HeadY-chestY)
 	# stand up
-	if (avg-chestY)<10:
+	if (abs(LHY-chestY)<8)and (standFLAG==False) :
 		print 'stand'
+		print 'frame=%d' %(frame)
+		standFLAG=True
 #		WalkReady(False)
 #		sit(False) #stand
 	# sit down
-	if (HY > 10) and (LHY>chestarea):
+	if (LHY > (chestY+20)) and (standFLAG == True):
+	#if (abs(chestY-LHY)-abs(int(0.3*rateY))<5):
+	#if (HY > 10) and (LHY>chestarea):
 	#if (HY<10) and (abs(chestY-HY)-abs(int(0.3*rateY))<10) and (avg > chestY) and (avg > HeadY):
 	#the distance between chestY and both hands Y(HY) almost equels half of distance between head and chest
 		print 'sit'
+		print 'frame=%d' %(frame)
+		standFLAG = False
 #		WalkReady(False)
 #		sit(True)
 	# start walking
-	if (HY<10) and (abs(HeadY-HY)-abs(int(0.3*rateY))<10) and (avg>HeadY) and (avg < chestY):
+	if (LHY > HeadY+15 ) and (LHY < chestY-15) and (standFLAG == True) :
+	#if (HY<10) and (abs(HeadY-HY)-abs(int(0.3*rateY))<10) and (avg>HeadY) and (avg < chestY):
 	# the distance between head and both hands Y almost equels half of  the distance between the head and chest 
 		print 'walking'
+		print 'frame=%d' %(frame)
+		standFLAG=False
 #		WalkReady(True)
 
 
@@ -165,17 +176,33 @@ def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea):
 #	if (HY<10) and (RHX == LHX) and (HY > chestY):
 #		UVA()
 	# SoS
-	if (HY<10) and (abs(HeadY-HY)-abs(int(0.3*rateY))<10) and (avg<HeadY) and (avg < chestY):
+	if (LHY < HeadY-10) and (standFLAG == True):
+#	if (HY<10) and (abs(HeadY-HY)-abs(int(0.3*rateY))<10) and (avg<HeadY) and (avg < chestY):
 		print 'sos'
+		print 'frame=%d' %(frame)
+		standFLAG=False
 #		SoS()
 
+	# Introduction
+	if (RHY >HeadY+15 ) and (RHY <chest-15) and (standFLAG == False) and (introFLAG == False):
+		introFLAG = True
+		print 'stand'
+#		api.PlayAction(2)
+		print 'wave'
+#		api.PlayAction('wave')
+		print 'sit'
+#		api.PlayAction(16)
 
 
 sit = 0
 walk = False
 X=0  # 0 - 320
 color = 'red'
-
+LHarea=0
+RHarea=0
+Headarea=0
+chestarea=0
+temparea=0
 
 #initialize Pixy interpreter thread
 pixy_init()
@@ -197,38 +224,41 @@ blocks = BlockArray(100)
 frame = 0
 battryLim = 107
 #wait for blocks
-api.SetMotorValue(20,433)
+#api.SetMotorValue(20,433)
 try:
   while 1:
      count = pixy_get_blocks(100, blocks)
-     if (int(api.BatteryVoltLevel()) <= battryLim):
-      if (int(api.BatteryVoltLevel()) <= battryLim):
-       if (int(api.BatteryVoltLevel()) <= battryLim):
+#     if (int(api.BatteryVoltLevel()) <= battryLim):
+#      if (int(api.BatteryVoltLevel()) <= battryLim):
+#       if (int(api.BatteryVoltLevel()) <= battryLim):
 
-	print 'Low Battery'
+#	print 'Low Battery'
 #	api.Walk(False)
 #	api.PlayAction(15)
 #	api.ServoShutdown()
 #	sys.exit()
-     else:
+#     else:
 #       print 'Battery power', int(api.BatteryVoltLevel())
-       if count > 0:
+     if count > 0:
 #	 
          #blocks found
 	 Uframe=frame/500
-         print 'frame %3d:' % (frame)
+         #print 'frame %3d:' % (frame)
          frame = frame +1
-	 #print 'RHY=%d LHY=%d chestY=%d HeadY=%d' %(RHY, LHY, chestY, HeadY)				
-	 checkSign(LHY, LHarea,RHY,RHarea, HeadY, Headarea,chestY, chestarea)
+	 				
+	 if (frame % 500) == 0:
+		 print '====================================='
+		 checkSign(LHY, LHarea,RHY,RHarea, HeadY, Headarea,chestY, chestarea, farme)
+		 print 'RHY=%d RHarea=%d LHY=%d LHarea=%d chestY=%d HeadY=%d Headarea=%d' %(RHY, RHarea, LHY, LHarea, chestY, HeadY, Headarea)
 
          for index in range(0, count):
 		# pixy reselution 320X200	     
 
-             	if (index == 0) and (blocks[index].signature == 1):
+             	if (index == 0) and (blocks[index].signature == 1) and (blocks[index].x < chestX):
 			RHX=blocks[index].x
 			RHY=blocks[index].y
 			RHarea=blocks[index].height*blocks[index].width
-		if (index == 1) and (blocks[index].signature == 1):
+		if (index == 1) and (blocks[index].signature == 1) and (blocks[index].x >= chestX):
 			LHX=blocks[index].x
 			LHY=blocks[index].y
 			LHarea=blocks[index].height*blocks[index].width
@@ -240,12 +270,14 @@ try:
 		if (index == 3) and (blocks[index].signature == 5):
 			if (blocks[index].y > tempY):
 				chestY=blocks[index].y
+				chestX=blocks[index].x
 				chestarea=blocks[index].height*blocks[index].width
 				HeadY=tempY
 				Headarea=temparea
 				tempY=0
 			else:
 				chestY=tempY
+				chestX=tempX
 				HeadY=blocks[index].y
 				tempY=0
 #						

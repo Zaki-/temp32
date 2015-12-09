@@ -218,23 +218,44 @@ def checkSign2(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame)
 		command.append('3')
 		command.popleft()
 	#UVA -4-
-	
+	if (LHY > (HeadY-10)) and (LHY < (HeadY+10)):
+		command.append('4')
+		command.popleft()
 	#SoS -5-
 	if (LHY < HeadY-10):
 		command.append('5')
 		command.popleft()
 		
 	#check the command
-	if (command == ['1','1','1']):
+	
+	if (command == ['1','1','1']) and (standFLAG == True):#sit -1-
 		print 'sit'
-	elif (command == ['2','2','2']):
+		api.PlayAction(16)
+		standFLAG=False
+	elif (command == ['2','2','2']) and (standFLAG == False) and (walkFLAG==False):#stand -2-
 		print 'stand'
-	elif (command == ['3','3','3']):
+		api.PlayAction(2)
+		standFLAG=True
+	elif (command == ['2','2','2']) and (walkFLAG== True) and (standFLAG == False):#stop walking
+		print 'stop and stand'
+		api.Walk(False)
+		api.PlayAction(2)
+		walkFLAG = False
+		standFLAG=True
+	elif (command == ['3','3','3']) and (standFLAG == True) and (standFLAG==True):#walk -3-
 		print 'walk'
-	elif (command == ['4','4','4']):
+		api.Walk(True)
+		api.WalkMove(3)
+		walkFLAG = True
+		standFLAG=False
+	elif (command == ['4','4','4']) and (standFLAG==True):#UVA -4-
 		print 'UVA'
-	elif (command == ['5','5','5']):
+		UVA()
+		standFLAG=False
+	elif (command == ['5','5','5']) and (standFLAG==True):#SoS -5-
 		print 'SOS'
+		SoS()
+		standFLAG=False
 	
 
 sit = 0

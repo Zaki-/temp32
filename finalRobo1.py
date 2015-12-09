@@ -85,6 +85,8 @@ jj=19	#index to find the reset and space
 code=[]		#store dots, dashes and spaces
 words=[]
 finalWord=[]
+firstCHAR=True
+firstSPACE=True
 # functions for morse
 
 def DotDashCheck(index, th):
@@ -252,11 +254,17 @@ try:
 #       if (code[:] != []):	
 	if (jj == 8):
 		#code.append('s')
-		Add2Word(code)
+		if (firstCHAR == True) and ( code == ['-']):
+			firstCHAR=False
+		else:
+			Add2Word(code)
 		code=[]
 	if (jj == 20):
-		code.append(' ')
-		Add2Word(code)
+		if firstSPACE==True :
+			firstSPACE=False
+		else:
+			code.append(' ')
+			Add2Word(code)
 		print 'code= ', code[:]
 		code=[]
 	if (jj == 40):#reset
@@ -284,6 +292,8 @@ try:
 		print 'final word=',Word[:]
 		Word=[]
 		code=[]
+		firstCHAR=True
+		firstSPACE=True
 #	print 'finalwords = ' ,Word[:]	
 	jj=jj+1  
 	ii=0

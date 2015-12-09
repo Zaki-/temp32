@@ -6,7 +6,8 @@ sys.path.append("/home/pi/HROS1-Framework/Linux/project/Human_Robots_Interaction
 
 
 import api 
-import sys
+
+from collections import deque
 
 from pixy import *
 from ctypes import *
@@ -193,7 +194,7 @@ def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
 		print 'sit'
 #		api.PlayAction(16)
 
-command=['1','1','1']
+command=deque(['1','1','1'])
 def checkSign2(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
 	global introFLAG, command
 	#intro

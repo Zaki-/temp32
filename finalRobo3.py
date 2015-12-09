@@ -109,12 +109,12 @@ def WalkReady(b):
 		walkFlag = True
 	elif (b == False) and (walkFlag == True) and (sitFlag == False):
 		api.Walk(False)
-		api.PlayAction(1)
+		api.PlayAction(2)
 		walkFlag = False
 
 
 
-def Sit(b):#pass true to make the robot sit
+def Sit(b):#pass true to make the robot sit and False to make it stand
 	global sitFlag
 	if (b == True) and (sitFlag == False):
 		api.PlayAction(16)
@@ -140,7 +140,7 @@ introFLAG=False
 
 def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
 	#one of the chalenges is the rate of the edges must change with the distance
-	global sitFLAG, standFLAG
+	global sitFLAG, standFLAG, introFLAG
 	HY=abs(LHY-RHY)
 	avg=abs(int((LHY+RHY)/2))
 	rateY=abs(HeadY-chestY)
@@ -193,6 +193,49 @@ def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
 		print 'sit'
 #		api.PlayAction(16)
 
+command=['1','1','1']
+def checkSign2(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
+	global introFLAG, command
+	#intro
+	if (RHY >HeadY+15 ) and (RHY <chest-15) and (introFlag==False):
+		introFLAG=True
+		print 'stand'
+#		api.PlayAction(2)
+		print 'wave'
+#		api.PlayAction('wave')
+		print 'sit'
+#		api.PlayAction(16)
+	#sit -1-
+	if (LHY > (chestY+20)):
+		command.append('1')
+		command.popleft()
+	#stand -2-
+	if (abs(LHY-chestY)<8):
+		command.append('2')
+		command.popleft()
+	#walk -3-
+	if (LHY > HeadY+15 ) and (LHY < chestY-15) :
+		command.append('3')
+		command.popleft()
+	#UVA -4-
+	
+	#SoS -5-
+	if (LHY < HeadY-10):
+		command.append('5')
+		command.popleft()
+		
+	#check the command
+	if (command == ['1','1','1']):
+		print 'sit'
+	elif (command == ['2','2','2']):
+		print 'stand'
+	elif (command == ['3','3','3']):
+		print 'walk'
+	elif (command == ['4','4','4']):
+		print 'UVA'
+	elif (command == ['5','5','5']):
+		print 'SOS'
+	
 
 sit = 0
 walk = False

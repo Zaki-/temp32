@@ -256,7 +256,7 @@ try:
 		#code.append('s')
 		if (firstCHAR == True) and ( code == ['-']):
 			firstCHAR=False
-		else:
+		elif (firstCHAR == False):
 			Add2Word(code)
 		code=[]
 	if (jj == 20):

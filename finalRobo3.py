@@ -61,6 +61,7 @@ def RoboInit():
     try:
                 if api.Initialize():
                         print("Initalized")
+			api.PlayAction(50)
                 else:
                         print("Intialization failed")
 
@@ -131,15 +132,15 @@ def SoS():
 
 def UVA():
 	if (sitFlag == False) and(walkFlag == False):
-		print 'api.PlayAction(UVA)'
-def CheckSign2(RHY, LHY, chestY, HeadY):
-	print RHY
+		api.PlayAction(80)
+
 
 sitFLAG=True
 standFLAG=False
 introFLAG=False
-
-def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
+walkFLAG=False
+frame = 0
+def checkSign2(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
 	#one of the chalenges is the rate of the edges must change with the distance
 	global sitFLAG, standFLAG, introFLAG
 	HY=abs(LHY-RHY)
@@ -185,7 +186,7 @@ def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
 #		SoS()
 
 	# Introduction
-	if (RHY >HeadY+15 ) and (RHY <chest-15) and (standFLAG == False) and (introFLAG == False):
+	if (RHY >HeadY+15 ) and (RHY <chestY-15) and (standFLAG == False) and (introFLAG == False):
 		introFLAG = True
 		print 'stand'
 #		api.PlayAction(2)
@@ -194,68 +195,73 @@ def checkSign(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
 		print 'sit'
 #		api.PlayAction(16)
 
-command=deque(['1','1','1'])
-def checkSign2(LHY, LHarea,RHY, RHarea,HeadY, Headarea,chestY, chestarea, frame):
-	global introFLAG, command
+command=['1','1','1','1','1']
+def checkSign(LHY,RHY, HeadY, chestY):
+	global introFLAG, command, walkFLAG, standFLAG
 	#intro
-	if (RHY >HeadY+15 ) and (RHY <chest-15) and (introFlag==False):
+	if (abs(RHY-chestY)<8 ) and (introFLAG==False):
 		introFLAG=True
 		print 'stand'
-#		api.PlayAction(2)
+		api.PlayAction(44)
 		print 'wave'
-#		api.PlayAction('wave')
+		api.PlayAction(25)
 		print 'sit'
-#		api.PlayAction(16)
+		api.PlayAction(50)
 	#sit -1-
 	if (LHY > (chestY+20)):
 		command.append('1')
-		command.popleft()
+#		command.popleft()
+		command=command[1:]
 	#stand -2-
 	if (abs(LHY-chestY)<8):
 		command.append('2')
-		command.popleft()
+#		command.popleft()
+		command=command[1:]
 	#walk -3-
 	if (LHY > HeadY+15 ) and (LHY < chestY-15) :
 		command.append('3')
-		command.popleft()
+#		command.popleft()
+		command=command[1:]
 	#UVA -4-
 	if (LHY > (HeadY-10)) and (LHY < (HeadY+10)):
 		command.append('4')
-		command.popleft()
+#		command.popleft()
+		command=command[1:]
 	#SoS -5-
 	if (LHY < HeadY-10):
 		command.append('5')
-		command.popleft()
+#		command.popleft()
+		command=command[1:]
 		
 	#check the command
 	
-	if (command == ['1','1','1']) and (standFLAG == True):#sit -1-
+	if (command == ['1','1','1','1','1']) and (standFLAG == True):#sit -1-
 		print 'sit'
-		api.PlayAction(16)
+		api.PlayAction(50)
 		standFLAG=False
-	elif (command == ['2','2','2']) and (standFLAG == False) and (walkFLAG==False):#stand -2-
+	elif (command == ['2','2','2','2','2']) and (standFLAG == False) and (walkFLAG==False):#stand -2-
 		print 'stand'
-		api.PlayAction(2)
+		api.PlayAction(44)
 		standFLAG=True
-	elif (command == ['2','2','2']) and (walkFLAG== True) and (standFLAG == False):#stop walking
+	elif (command == ['2','2','2','2','2']) and (walkFLAG== True) and (standFLAG == False):#stop walking
 		print 'stop and stand'
 		api.Walk(False)
-		api.PlayAction(2)
+		api.PlayAction(44)
 		walkFLAG = False
 		standFLAG=True
-	elif (command == ['3','3','3']) and (standFLAG == True) and (standFLAG==True):#walk -3-
+	elif (command == ['3','3','3','3','3']) and (standFLAG == True) and (standFLAG==True):#walk -3-
 		print 'walk'
 		api.Walk(True)
-		api.WalkMove(3)
+		api.WalkMove(0)
 		walkFLAG = True
 		standFLAG=False
-	elif (command == ['4','4','4']) and (standFLAG==True):#UVA -4-
+	elif (command == ['4','4','4','4','4']) and (standFLAG==True):#UVA -4-
 		print 'UVA'
 		UVA()
 		standFLAG=False
-	elif (command == ['5','5','5']) and (standFLAG==True):#SoS -5-
+	elif (command == ['5','5','5','5','5']) and (standFLAG==True):#SoS -5-
 		print 'SOS'
-		SoS()
+		UVA()
 		standFLAG=False
 	
 
@@ -313,8 +319,9 @@ try:
 	 				
 	 if (frame % 500) == 0:
 		 print '====================================='
-		 checkSign(LHY, LHarea,RHY,RHarea, HeadY, Headarea,chestY, chestarea, farme)
-		 print 'RHY=%d RHarea=%d LHY=%d LHarea=%d chestY=%d HeadY=%d Headarea=%d' %(RHY, RHarea, LHY, LHarea, chestY, HeadY, Headarea)
+		 checkSign(LHY,RHY, HeadY, chestY)
+		 print 'RHY=%d LHY=%d chestY=%d HeadY=%d' %(RHY, LHY, chestY, HeadY)
+		 print command
 
          for index in range(0, count):
 		# pixy reselution 320X200	     

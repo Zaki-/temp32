@@ -61,7 +61,7 @@ def RoboInit():
     try:
                 if api.Initialize():
                         print("Initalized")
-			api.PlayAction(50)
+			api.PlayAction(51)
                 else:
                         print("Intialization failed")
 
@@ -128,7 +128,7 @@ def Sit(b):#pass true to make the robot sit and False to make it stand
 
 def SoS():
 	if (sitFlag == False) and (walkFlag == False):
-		print 'api.PlayAction(sos)'
+		api.PlayAction(33)
 
 def UVA():
 	if (sitFlag == False) and(walkFlag == False):
@@ -199,7 +199,7 @@ command=['1','1','1','1','1']
 def checkSign(LHY,RHY, HeadY, chestY):
 	global introFLAG, command, walkFLAG, standFLAG
 	#intro
-	if (abs(RHY-chestY)<8 ) and (introFLAG==False):
+	if (abs(RHY-chestY)<8 ) and (introFLAG==False) and (abs(LHY-chestY)>70):
 		introFLAG=True
 		print 'stand'
 		api.PlayAction(44)
@@ -213,7 +213,7 @@ def checkSign(LHY,RHY, HeadY, chestY):
 #		command.popleft()
 		command=command[1:]
 	#stand -2-
-	if (abs(LHY-chestY)<8):
+	if (abs(LHY-(chestY))<18):
 		command.append('2')
 #		command.popleft()
 		command=command[1:]
@@ -228,9 +228,13 @@ def checkSign(LHY,RHY, HeadY, chestY):
 #		command.popleft()
 		command=command[1:]
 	#SoS -5-
-	if (LHY < HeadY-10):
+	if (LHY < HeadY-10) and (RHY < HeadY-10):
 		command.append('5')
 #		command.popleft()
+		command=command[1:]
+	#END -6-
+	if (LHY < HeadY-10) and (RHY > chestY+10):
+		command.append('6')
 		command=command[1:]
 		
 	#check the command
@@ -246,7 +250,7 @@ def checkSign(LHY,RHY, HeadY, chestY):
 	elif (command == ['2','2','2','2','2']) and (walkFLAG== True) and (standFLAG == False):#stop walking
 		print 'stop and stand'
 		api.Walk(False)
-		api.PlayAction(44)
+		api.PlayAction(45)
 		walkFLAG = False
 		standFLAG=True
 	elif (command == ['3','3','3','3','3']) and (standFLAG == True) and (standFLAG==True):#walk -3-
@@ -257,13 +261,19 @@ def checkSign(LHY,RHY, HeadY, chestY):
 		standFLAG=False
 	elif (command == ['4','4','4','4','4']) and (standFLAG==True):#UVA -4-
 		print 'UVA'
-		UVA()
+		api.PlayAction(80)
 		standFLAG=False
 	elif (command == ['5','5','5','5','5']) and (standFLAG==True):#SoS -5-
 		print 'SOS'
-		UVA()
+		api.PlayAction(33)
 		standFLAG=False
-	
+	elif (command == ['6','6','6','6','6']) and (standFLAG==True):#END -6-
+		print 'END'
+		api.PlayAction(39)
+		api.PlayAction(50)
+		api.ServoShutdown()
+	        sys.exit()
+
 
 sit = 0
 walk = False
@@ -326,11 +336,11 @@ try:
          for index in range(0, count):
 		# pixy reselution 320X200	     
 
-             	if (index == 0) and (blocks[index].signature == 1) and (blocks[index].x < chestX):
+             	if (blocks[index].signature == 1) and (blocks[index].x < chestX):
 			RHX=blocks[index].x
 			RHY=blocks[index].y
 			RHarea=blocks[index].height*blocks[index].width
-		if (index == 1) and (blocks[index].signature == 1) and (blocks[index].x >= chestX):
+		if  (blocks[index].signature == 1) and (blocks[index].x >= chestX):
 			LHX=blocks[index].x
 			LHY=blocks[index].y
 			LHarea=blocks[index].height*blocks[index].width
@@ -357,3 +367,4 @@ try:
 except (KeyboardInterrupt):
    api.ServoShutdown()
    sys.exit()
+
